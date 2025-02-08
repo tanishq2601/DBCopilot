@@ -23,7 +23,17 @@ load_dotenv(override=True)
 
 
 class QueryGenerator:
+    """
+    A class to generate and execute SQL queries using OpenAI's GPT model and process the results.
+    
+    This class handles natural language to SQL conversion, database interactions,
+    and generation of business reports in various formats.
+    """
+
     def __init__(self):
+        """
+        Initialize the QueryGenerator with Azure OpenAI client configuration.
+        """
         self.openai_client = AzureOpenAI(
             api_key=os.getenv("AZURE_OPENAI_KEY"),  
             api_version="2024-08-01-preview",
@@ -32,10 +42,31 @@ class QueryGenerator:
         )
     
     def __repr__(self):
+        """
+        Returns a string representation of the QueryGenerator instance.
+        
+        Returns:
+            str: A descriptive message about the QueryGenerator initialization.
+        """
         return "Initialising Query Generator 🚀"
     
     @staticmethod
     def execute_generated_queries(sql_query, database_name="moonberg", user_name="raimeno", host="localhost"):
+        """
+        Execute SQL queries on the specified PostgreSQL database.
+        
+        Args:
+            sql_query (str): The SQL query to execute
+            database_name (str): Name of the database (default: 'moonberg')
+            user_name (str): Database username (default: 'raimeno')
+            host (str): Database host address (default: 'localhost')
+            
+        Returns:
+            list: Results of the executed query
+            
+        Raises:
+            Exception: If database connection or query execution fails
+        """
         db_password = os.getenv("DATABASE_PASSWORD")
         
         try:
@@ -56,6 +87,15 @@ class QueryGenerator:
         
     @staticmethod
     def read_sys_prompt(file_path="system_prompt.yaml"):
+        """
+        Read system prompts from a YAML configuration file.
+        
+        Args:
+            file_path (str): Path to the YAML file containing prompts
+            
+        Returns:
+            dict: Dictionary containing the loaded prompts
+        """
         with open(file_path) as file:
             prompt = yaml.full_load(file)
 
@@ -64,6 +104,15 @@ class QueryGenerator:
 
     @staticmethod
     def parse_markdown_table(md_text):
+        """
+        Parse tables from markdown text into a structured format.
+        
+        Args:
+            md_text (str): Markdown text containing tables
+            
+        Returns:
+            list: List of tables, where each table is a list of rows
+        """
         tables = []
         lines = md_text.split("\n")
         table_data = []
@@ -84,6 +133,13 @@ class QueryGenerator:
 
     @staticmethod
     def generate_business_report(markdown_text: str, output_pdf: str):
+        """
+        Generate a PDF business report from markdown text.
+        
+        Args:
+            markdown_text (str): The markdown text to convert to PDF
+            output_pdf (str): Path where the PDF should be saved
+        """
         html_content = markdown2.markdown(markdown_text)
 
         tables = QueryGenerator.parse_markdown_table(markdown_text)
@@ -123,6 +179,15 @@ class QueryGenerator:
         logger.info("Generated business report 🌟")
 
     def text_to_query_generator(self, query):
+        """
+        Convert natural language text to SQL query using GPT model.
+        
+        Args:
+            query (str): Natural language query text
+            
+        Returns:
+            str: Generated SQL query
+        """
         logger.info("Understanding user requirements and generating appropraiate user query...")
         
         system_prompt = self.read_sys_prompt()
@@ -139,6 +204,18 @@ class QueryGenerator:
         return filtered_query
 
     def generate_nl_responses(self, user_query, sql_response, business_report=False, pdf_output_path=None):
+        """
+        Generate natural language responses from SQL query results.
+        
+        Args:
+            user_query (str): Original user query
+            sql_response: SQL query execution results
+            business_report (bool): Whether to generate a business report (default: False)
+            pdf_output_path (str): Path for PDF output if business_report is True
+            
+        Returns:
+            str: Natural language response explaining the query results
+        """
         nl_generator_prompt = self.read_sys_prompt()
         querry_mapping = f"{user_query} : {sql_response}"
             
@@ -171,6 +248,10 @@ class QueryGenerator:
 
 
 if __name__ == "__main__":
+    """
+    Example usage of the QueryGenerator class.
+    Demonstrates the complete workflow from query generation to natural language response.
+    """
     query="Find the Token Pair with the Highest Difference Between Buy and Sell Transactions in the Last 24 Hours"
     
     query_generator = QueryGenerator()
