@@ -16,7 +16,6 @@ import re
 
 import markdown2
 
-import pyodbc
 from openai import AzureOpenAI
 from dotenv import load_dotenv
 
@@ -36,7 +35,7 @@ class QueryGenerator:
         return "Initialising Query Generator 🚀"
     
     @staticmethod
-    def execute_generated_queries(sql_query, database_name="moonberg_staging_data", user_name="tanishq26", host="localhost"):
+    def execute_generated_queries(sql_query, database_name="moonberg", user_name="raimeno", host="localhost"):
         db_password = os.getenv("DATABASE_PASSWORD")
         
         try:
@@ -63,30 +62,31 @@ class QueryGenerator:
         return prompt
 
 
+    @staticmethod
     def parse_markdown_table(md_text):
-            tables = []
-            lines = md_text.split("\n")
-            table_data = []
-            
-            for line in lines:
-                if "|" in line:  
-                    row = [cell.strip() for cell in line.split("|")[1:-1]] 
-                    if "---" not in row: 
-                        table_data.append(row)
-                elif table_data: 
-                    tables.append(table_data)
-                    table_data = []
-            
-            if table_data:
+        tables = []
+        lines = md_text.split("\n")
+        table_data = []
+        
+        for line in lines:
+            if "|" in line:  
+                row = [cell.strip() for cell in line.split("|")[1:-1]] 
+                if "---" not in row: 
+                    table_data.append(row)
+            elif table_data: 
                 tables.append(table_data)
-            
-            return tables
+                table_data = []
+        
+        if table_data:
+            tables.append(table_data)
+        
+        return tables
 
     @staticmethod
     def generate_business_report(markdown_text: str, output_pdf: str):
         html_content = markdown2.markdown(markdown_text)
 
-        tables = parse_markdown_table(markdown_text)
+        tables = QueryGenerator.parse_markdown_table(markdown_text)
 
         doc = SimpleDocTemplate(output_pdf, pagesize=letter)
         styles = getSampleStyleSheet()
@@ -181,3 +181,7 @@ if __name__ == "__main__":
     
     nl_response = query_generator.generate_nl_responses(query, query_results)
     
+    
+    print("The sql query is: ", filtered_query)
+    print("The response is: ", nl_response)
+
