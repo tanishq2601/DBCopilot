@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from sql_generator import QueryGenerator
+from query_genrator.sql_generator import QueryGenerator
 
 app = FastAPI()
 
@@ -31,5 +31,4 @@ def operator(query):
 @app.post("/databse_copilot")
 def main(query: Query):
     nl_response = operator(query)
-    print(nl_response)
     return {"response" : nl_response}

@@ -51,7 +51,7 @@ class QueryGenerator:
         return "Initialising Query Generator 🚀"
     
     @staticmethod
-    def execute_generated_queries(sql_query, database_name="moonberg", user_name="raimeno", host="localhost"):
+    def execute_generated_queries(sql_query, database_name="moonberg_staging_data", user_name="tanishq26", host="localhost"):
         """
         Execute SQL queries on the specified PostgreSQL database.
         
