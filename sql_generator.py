@@ -245,24 +245,3 @@ class QueryGenerator:
             logger.info("Generated business insights 🌟")
         return filtered_response
     
-
-
-if __name__ == "__main__":
-    """
-    Example usage of the QueryGenerator class.
-    Demonstrates the complete workflow from query generation to natural language response.
-    """
-    query="Find the Token Pair with the Highest Difference Between Buy and Sell Transactions in the Last 24 Hours"
-    
-    query_generator = QueryGenerator()
-    
-    filtered_query = query_generator.text_to_query_generator(query)
-
-    query_results = query_generator.execute_generated_queries(filtered_query)
-    
-    nl_response = query_generator.generate_nl_responses(query, query_results)
-    
-    
-    print("The sql query is: ", filtered_query)
-    print("The response is: ", nl_response)
-
