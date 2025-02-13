@@ -3,3 +3,4 @@ test.ipynb
 test.pdf
 .DS_Store
 *.pyc
+.vercel
