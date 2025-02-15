@@ -4,3 +4,5 @@ test.pdf
 .DS_Store
 *.pyc
 .vercel
+
+node_modules/
