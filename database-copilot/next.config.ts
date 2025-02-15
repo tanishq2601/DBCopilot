@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/query",
-        destination: "http://localhost:8084/databse_copilot",
+        destination: "http://localhost:8080/databse_copilot",
       },
     ];
   },
