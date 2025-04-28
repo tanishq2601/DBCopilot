@@ -15,7 +15,11 @@ export default function Home() {
     setError(null);
 
     try {
+<<<<<<< HEAD
       const res = await fetch("http://localhost:8080/databse_copilot", {
+=======
+      const res = await fetch("http://localhost:8085/databse_copilot", {
+>>>>>>> c55302b (final changes to perfect)
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +75,7 @@ export default function Home() {
               ? 'bg-gray-800 text-white placeholder-gray-400 border-gray-600' 
               : 'bg-gray-200 text-black placeholder-gray-600 border-gray-400'
           }`}
-        />
+                  />
         <button
           onClick={handleQuery}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
